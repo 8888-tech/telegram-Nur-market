@@ -1,61 +1,39 @@
-body {
-    font-family: 'Poppins', sans-serif; /* Zamonaviy shrift */
-    background: #f8f9fa;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+const URL = "https://script.google.com/macros/s/AKfycbwq_yG58u9265RPnp42PO8kacRhnmZMvgTEciTpUfYvIJ09tWrQSGUSuFZtkQOrFYBAUg/exec";
+let cart = []; let allProds = [];
+
+async function load() {
+    const res = await fetch(URL);
+    allProds = await res.json();
+    renderCats(); renderProds(allProds);
 }
 
-#reg-page {
-    background: white;
-    padding: 35px;
-    border-radius: 20px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08); /* Yumshoq soya */
-    text-align: center;
-    width: 85%;
-    max-width: 320px;
+function renderCats() {
+    const cats = ['Barchasi', ...new Set(allProds.map(p => p.category))];
+    document.getElementById('cat-bar').innerHTML = cats.map(c => 
+        `<button onclick="filter('${c}')">${c}</button>`).join('');
 }
 
-h2 {
-    font-size: 22px;
-    margin-bottom: 20px;
-    color: #333;
+function renderProds(list) {
+    document.getElementById('product-list').innerHTML = list.map(p => `
+        <div class="card">
+            <img src="${p.image}">
+            <p>${p.name}</p>
+            <button onclick="cart.push('${p.name}'); alert('${p.name} qo\'shildi')">Savatga</button>
+        </div>`).join('');
 }
 
-input {
-    width: 100%;
-    padding: 14px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    box-sizing: border-box;
-    font-size: 16px;
-    transition: 0.3s;
+function filter(cat) {
+    renderProds(cat === 'Barchasi' ? allProds : allProds.filter(p => p.category === cat));
 }
 
-input:focus {
-    border-color: #27ae60;
-    outline: none;
-    box-shadow: 0 0 5px rgba(39, 174, 96, 0.2);
+function saveUser() {
+    document.getElementById('reg-page').classList.remove('active');
+    document.getElementById('shop-page').classList.add('active');
+    load();
 }
 
-button {
-    width: 100%;
-    padding: 14px;
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 15px;
-}
-
-button:hover {
-    background-color: #219150;
-    transform: translateY(-2px); /* Kichik effekt */
+function checkout() {
+    const name = document.getElementById('user-name').value;
+    const phone = document.getElementById('user-phone').value;
+    Telegram.WebApp.sendData(`Buyurtma:\nMijoz: ${name}\nTel: ${phone}\nTovar: ${cart.join(', ')}`);
 }
