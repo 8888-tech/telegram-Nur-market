@@ -2,13 +2,15 @@ const URL = "https://script.google.com/macros/s/AKfycbwq_yG58u9265RPnp42PO8kacRh
 let allProducts = [];
 let cart = [];
 
-// 1. Kirish
+// 1. Kirish funksiyasi
 async function saveUser() {
     const name = document.getElementById('user-name').value;
     const phone = document.getElementById('user-phone').value;
     if (name && phone) {
         document.getElementById('reg-page').classList.remove('active');
         document.getElementById('shop-page').classList.add('active');
+        
+        // Ma'lumotlarni yuklash
         const res = await fetch(URL);
         allProducts = await res.json();
         renderCategories();
@@ -17,7 +19,7 @@ async function saveUser() {
     }
 }
 
-// 2. Kategoriyalar
+// 2. Kategoriyalarni chiqarish
 function renderCategories() {
     const cats = [...new Set(allProducts.map(p => p.category))];
     document.getElementById('product-list').innerHTML = cats.map(cat => `
@@ -25,76 +27,40 @@ function renderCategories() {
     `).join('');
 }
 
-// 3. Mahsulotlar
+// 3. Kategoriyaga kirganda rasmlarni chiqarish
 function showProds(cat) {
     const prods = allProducts.filter(p => p.category === cat);
     document.getElementById('product-list').innerHTML = `
         <button onclick="renderCategories()" style="background:#888; width:90%; margin:10px 5%;">⬅️ Orqaga</button>
         ${prods.map(p => `
             <div class="product-card">
+                <img src="${p.image}" style="width:100px; height:100px; border-radius:10px;">
                 <p>${p.name} - ${p.price} so'm</p>
-                <button onclick="addToCart('${p.name}', ${p.price})">Savatga qo'shish</button>
+                <button onclick="addToCart('${p.name}', ${p.price})">🛒 Qo'shish</button>
             </div>
         `).join('')}
     `;
 }
 
-// 4. Savatga qo'shish
+// 4. Savat mantiqi
 function addToCart(name, price) {
-    let existingItem = cart.find(item => item.name === name);
-    if (existingItem) {
-        existingItem.qty += 1;
-    } else {
-        cart.push({ name, price, qty: 1 });
-    }
-    updateCartButton();
+    let item = cart.find(i => i.name === name);
+    item ? item.qty++ : cart.push({ name, price, qty: 1 });
+    let totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
+    document.getElementById('cart-btn').innerText = `🛒 Savat (${totalQty} ta)`;
     alert(name + " qo'shildi!");
 }
 
-function updateCartButton() {
-    let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-    document.getElementById('cart-btn').innerText = `🛒 Savat (${totalQty} ta)`;
-}
-
-// 5. Savatni ko'rsatish
 function showCart() {
-    let list = document.getElementById('product-list');
-    let total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    
-    if (cart.length === 0) return alert("Savat bo'sh!");
-    
-    list.innerHTML = `<h3>Sizning savatingiz:</h3>`;
-    cart.forEach((item, index) => {
-        list.innerHTML += `
-            <div class="product-card">
-                <p>${item.name} - ${item.price} so'm x ${item.qty}</p>
-                <button onclick="changeQty(${index}, -1)">-</button>
-                <button onclick="changeQty(${index}, 1)">+</button>
-            </div>
-        `;
-    });
-    list.innerHTML += `
-        <p>Jami: ${total} so'm</p>
-        <select id="payment-method">
-            <option value="Naqd">Naqd pul</option>
-            <option value="Click/Payme">Click / Payme</option>
-        </select>
-        <button onclick="checkout()" style="background:#27ae60;">Buyurtmani yuborish</button>
-        <button onclick="renderCategories()" style="background:#888;">⬅️ Do'konga qaytish</button>
-    `;
+    let total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    document.getElementById('product-list').innerHTML = `<h3>Savat:</h3>` + cart.map((i, idx) => `
+        <p>${i.name} - ${i.qty} ta</p>
+    `).join('') + `<p>Jami: ${total} so'm</p>
+    <select id="pay-type"><option>Naqd</option><option>Click/Payme</option></select>
+    <button onclick="checkout()">Buyurtmani yuborish</button>`;
 }
 
-function changeQty(index, delta) {
-    cart[index].qty += delta;
-    if (cart[index].qty <= 0) cart.splice(index, 1);
-    updateCartButton();
-    showCart();
-}
-
-// 6. Buyurtmani yuborish
 function checkout() {
-    let payment = document.getElementById('payment-method').value;
     let items = cart.map(i => `${i.name} (${i.qty} ta)`).join(', ');
-    let total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    Telegram.WebApp.sendData(`Buyurtma: ${items}\nTo'lov: ${payment}\nJami: ${total} so'm`);
+    Telegram.WebApp.sendData("Buyurtma: " + items + " | Jami: " + document.getElementById('pay-type').value);
 }

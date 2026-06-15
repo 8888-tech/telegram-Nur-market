@@ -1,4 +1,3 @@
-<button onclick="saveUser()">Kirish</button>
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -9,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div id="reg-page" class="page active">
         <h2>Nur Marketga xush kelibsiz!</h2>
         <input type="text" id="user-name" placeholder="Ism va Familiya">
@@ -17,9 +17,11 @@
     </div>
 
     <div id="shop-page" class="page">
-        <div id="product-list"></div>
-        <div id="cart-btn" class="floating-cart" onclick="checkout()">🛒 Savatni ko'rish (0)</div>
+        <div id="product-list">
+            </div>
+        <div id="cart-btn" class="floating-cart" onclick="showCart()">🛒 Savat (0 ta)</div>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>
