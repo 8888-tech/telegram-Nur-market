@@ -4,4 +4,6 @@
 input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
 button { width: 100%; padding: 10px; background: #27ae60; color: white; border: none; cursor: pointer; }
 .cart-btn { position: fixed; bottom: 0; width: 100%; padding: 15px; background: #2c3e50; color: white; }
-#product-list { padding: 10px; margin-bottom: 60px; }
+#product-list { padding: 10px; margin-bottom: 60px; }.cat-btn { display: block; width: 100%; margin: 10px 0; padding: 15px; background: #3498db; color: white; border-radius: 10px; }
+.card { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 8px; text-align: center; }
+.cart-btn { position: fixed; bottom: 0; width: 100%; padding: 15px; background: #27ae60; color: white; }
