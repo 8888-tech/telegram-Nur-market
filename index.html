@@ -4,52 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nur Market</title>
-    <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f4f4; padding-bottom: 60px; }
-        .header { background: #fff; padding: 15px; text-align: center; font-weight: bold; }
-        /* Kategoriyalar */
-        .cat-bar { display: flex; overflow-x: auto; padding: 10px; background: #fff; gap: 10px; }
-        .cat-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid #ccc; background: #fff; white-space: nowrap; }
-        /* Mahsulotlar (Kichik rasmlar uchun) */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
-        .card { background: #fff; padding: 8px; border-radius: 10px; text-align: center; }
-        .card img { width: 100%; height: 100px; object-fit: contain; border-radius: 5px; }
-        .price { color: green; font-weight: bold; }
-        /* Savatcha */
-        .cart-fixed { position: fixed; bottom: 0; width: 100%; background: #27ae60; color: white; text-align: center; padding: 15px; }
-    </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="header">Nur Market</div>
-
-    <!-- Kategoriyalar -->
-    <div class="cat-bar">
-        <button class="cat-btn" onclick="filter('Barchasi')">Barchasi</button>
-        <button class="cat-btn" onclick="filter('Xo\'jalik')">Xo'jalik</button>
+    <div id="reg-page" class="page active">
+        <h2>Xush kelibsiz!</h2>
+        <input type="text" id="user-name" placeholder="Ismingizni yozing">
+        <button onclick="registerUser()">Kirish</button>
     </div>
 
-    <!-- Mahsulotlar ro'yxati -->
-    <div class="grid" id="list">
-        <div class="card">
-            <img src="https://via.placeholder.com/150" alt="Tovar">
-            <p>Qadoqlash plyonkasi</p>
-            <p class="price">45 000 so'm</p>
-            <button onclick="addToCart('Plyonka', 45000)">Savatga (+)</button>
+    <div id="shop-page" class="page">
+        <div class="cat-bar">
+            <button onclick="filter('Barchasi')">Barchasi</button>
+            <button onclick="filter('Xo\'jalik')">Xo'jalik</button>
         </div>
+        <div id="product-list" class="grid"></div>
+        <button class="cart-btn" onclick="checkout()">🛒 Zakaz berish</button>
     </div>
 
-    <div class="cart-fixed" onclick="alert('Savatchangiz: ' + cart.length + ' ta tovar')">
-        🛒 Savatchani ko'rish
-    </div>
-
-    <script>
-        let cart = [];
-        function addToCart(name, price) {
-            cart.push({name, price});
-            alert(name + " savatga qo'shildi!");
-        }
-        function filter(cat) { alert(cat + " kategoriyasi tanlandi"); }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
