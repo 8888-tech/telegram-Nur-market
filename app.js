@@ -2,45 +2,55 @@ const URL = "https://script.google.com/macros/s/AKfycbwq_yG58u9265RPnp42PO8kacRh
 let allProducts = [];
 let cart = [];
 
-async function saveUser() {
-    const name = document.getElementById('user-name').value;
-    const phone = document.getElementById('user-phone').value;
-    if (name && phone) {
-        document.getElementById('reg-page').classList.remove('active');
-        document.getElementById('shop-page').classList.add('active');
-        try {
-            const res = await fetch(URL);
-            allProducts = await res.json();
-            renderCategories();
-        } catch (e) { alert("Xatolik: Ma'lumot yuklanmadi"); }
-    } else { alert("Iltimos, ma'lumotlarni to'liq kiriting!"); }
+// Ma'lumotlarni yuklash (avtomatik ishga tushadi)
+async function loadProducts() {
+    try {
+        const res = await fetch(URL);
+        allProducts = await res.json();
+    } catch (e) { console.error("Xatolik:", e); }
+}
+loadProducts(); // Bot ochilganda yuklaydi
+
+// Kategoriyani bosganda mahsulotlarni ko'rsatish
+function showProds(catName) {
+    const prods = allProducts.filter(p => p.category === catName);
+    const list = document.getElementById('product-list');
+    
+    list.innerHTML = `<button onclick="renderCategories()" style="background:#888; width:100%; padding:10px; margin-bottom:10px;">⬅️ Orqaga</button>`;
+    
+    prods.forEach(p => {
+        list.innerHTML += `
+            <div class="product-card">
+                <p><b>${p.name}</b> - ${p.price} so'm</p>
+                <button onclick="addToCart('${p.name}', ${p.price})" style="background:#27ae60;">🛒 Savatga</button>
+            </div>
+        `;
+    });
 }
 
-function renderCategories() {
-    const cats = [...new Set(allProducts.map(p => p.category))];
-    document.getElementById('product-list').innerHTML = cats.map(cat => `
-        <div class="cat-card" onclick="showProds('${cat}')"><h3>${cat}</h3></div>
-    `).join('');
-}
-
-function showProds(cat) {
-    const prods = allProducts.filter(p => p.category === cat);
-    document.getElementById('product-list').innerHTML = `<button onclick="renderCategories()">⬅️ Orqaga</button>` + 
-    prods.map(p => `
-        <div class="product-card">
-            <p>${p.name} - ${p.price} so'm</p>
-            <button onclick="addToCart('${p.name}', ${p.price})">Savatga qo'shish</button>
-        </div>
-    `).join('');
-}
-
+// Savatga qo'shish
 function addToCart(name, price) {
     cart.push({ name, price });
-    document.getElementById('cart-btn').innerText = `🛒 Savat (${cart.length} ta)`;
+    const btn = document.getElementById('cart-btn');
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    btn.innerText = `🛒 Zakazni yuborish (${cart.length} ta - ${total} so'm)`;
     alert(name + " savatga qo'shildi!");
 }
 
+// Zakaz yuborish
 function checkout() {
     if (cart.length === 0) return alert("Savat bo'sh!");
-    Telegram.WebApp.sendData(`Buyurtma: ${cart.map(i=>i.name).join(', ')}`);
+    const items = cart.map(i => i.name).join(', ');
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    Telegram.WebApp.sendData(`Buyurtma:\n${items}\nJami: ${total} so'm`);
+}
+
+// Kategoriyalarni qayta ko'rsatish
+function renderCategories() {
+    const cats = [...new Set(allProducts.map(p => p.category))];
+    document.getElementById('product-list').innerHTML = cats.map(cat => `
+        <div class="cat-card" onclick="showProds('${cat}')">
+            <h3>${cat}</h3>
+        </div>
+    `).join('');
 }
