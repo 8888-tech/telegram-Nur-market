@@ -9,23 +9,16 @@
 </head>
 <body>
     <div id="reg-page" class="page active">
-        <div class="header-box">
-            <h2>Nur Marketga xush kelibsiz!</h2>
-            <p>Buyurtma berish uchun ma'lumotlaringizni kiriting:</p>
-        </div>
+        <h2>Nur Marketga xush kelibsiz!</h2>
         <input type="text" id="user-name" placeholder="Ism va Familiya">
-        <input type="tel" id="user-phone" placeholder="+998 90 123 45 67">
+        <input type="tel" id="user-phone" placeholder="+998">
         <button onclick="saveUser()">Kirish</button>
     </div>
 
     <div id="shop-page" class="page">
-        <div id="product-list">
-            </div>
-        <div id="cart-btn" class="floating-cart" onclick="checkout()">
-            🛒 Savatni ko'rish (0)
-        </div>
+        <div id="product-list"></div>
+        <div id="cart-btn" class="floating-cart" onclick="checkout()">🛒 Savatni ko'rish (0)</div>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
