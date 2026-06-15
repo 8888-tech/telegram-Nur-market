@@ -2,174 +2,20 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nur Market</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="home-page" class="page active">
-        <header class="header">
-            <h2>Nur Market</h2>
-            <p>Siz qidirgan hamma narsa shu yerda!</p>
-        </header>
+    <header>
+        <h1>Nur Market</h1>
+    </header>
 
-        <div class="container">
-            <div class="banner">
-                <div class="banner-content">
-                    <span>🔥 AKSIYA</span>
-                    <h3>Nur Marketdan ilk xarid uchun yetkazib berish tekin!</h3>
-                </div>
-            </div>
+    <!-- Mahsulotlar shu yerda paydo bo'ladi -->
+    <div id="products-container"></div>
 
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Mahsulot qidirish..." oninput="searchProducts()">
-                <span class="search-icon">🔍</span>
-            </div>
-
-            <div class="categories">
-                <button class="cat-btn active">Hammasi</button>
-                <button class="cat-btn">Fast-food</button>
-                <button class="cat-btn">Ichimliklar</button>
-            </div>
-
-            <div class="product-grid">
-                <div class="product-card" data-name="lavash burger go'sht">
-                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=400');"></div>
-                    <div class="product-info">
-                        <h3>Katta Lavash</h3>
-                        <p class="price">35,000 so'm</p>
-                        <button class="add-btn" onclick="addToCart('Katta Lavash', 35000)">Qo'shish +</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-name="coca cola ichimlik">
-                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400');"></div>
-                    <div class="product-info">
-                        <h3>Coca-Cola 1.5L</h3>
-                        <p class="price">12,000 so'm</p>
-                        <button class="add-btn" onclick="addToCart('Coca-Cola 1.5L', 12000)">Qo'shish +</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="cart-page" class="page">
-        <div class="page-title">🛒 Sizning Savatchangiz</div>
-        <div class="container">
-            <div id="cart-items">
-                <p style="text-align: center; color: #718096;">Savatchangiz hozircha bo'sh 😕</p>
-            </div>
-
-            <div class="delivery-options">
-                <h3>Yetkazib berish turi:</h3>
-                <label class="radio-label">
-                    <input type="radio" name="delivery" value="dostavka" checked> 🚚 Dostavka (Kuryer)
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="delivery" value="samovivoz"> 🏃‍♂️ O'zim olib ketaman (Samovivoz)
-                </label>
-            </div>
-
-            <div class="cart-summary">
-                <h3>Jami: <span id="total-price">0</span> so'm</h3>
-            </div>
-        </div>
-    </div>
-
-    <div id="profile-page" class="page">
-        <div class="page-title">👤 Shaxsiy Kabinet</div>
-        <div class="container">
-            <div class="profile-card">
-                <h3 id="user-name">Foydalanuvchi</h3>
-                <p id="user-phone">📞 Telefon: Berilmagan</p>
-            </div>
-
-            <div class="orders-section">
-                <h3>📦 Buyurtmalar tarixi</h3>
-                <div class="order-item">
-                    <p><strong>ID #1024</strong> - 15.06.2026</p>
-                    <p>Holati: <span class="status status-shipping">🚚 Yo'lda</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <nav class="bottom-nav">
-        <a href="javascript:void(0)" class="nav-item active" onclick="switchPage('home-page', this)">🏠 Do'kon</a>
-        <a href="javascript:void(0)" class="nav-item" onclick="switchPage('cart-page', this)">🛒 Savat (<span id="cart-count">0</span>)</a>
-        <a href="javascript:void(0)" class="nav-item" onclick="switchPage('profile-page', this)">👤 Profil</a>
-    </nav>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
-        }
-
-        let cart = [];
-
-        function switchPage(pageId, element) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            
-            document.getElementById(pageId).classList.add('active');
-            element.classList.add('active');
-
-            if (pageId === 'cart-page' && cart.length > 0) {
-                tg.MainButton.text = "BUYURTMA BERISH";
-                tg.MainButton.show();
-            } else {
-                tg.MainButton.hide();
-            }
-        }
-
-        function addToCart(name, price) {
-            cart.push({name, price});
-            document.getElementById('cart-count').innerText = cart.length;
-            updateCart();
-        }
-
-        function updateCart() {
-            const cartItemsContainer = document.getElementById('cart-items');
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `<p style="text-align: center; color: #718096;">Savatchangiz bo'sh</p>`;
-                return;
-            }
-
-            let html = '';
-            let total = 0;
-            cart.forEach((item, index) => {
-                total += item.price;
-                html += `
-                    <div class="cart-item-row">
-                        <span>${item.name}</span>
-                        <span>${item.price.toLocaleString()} so'm</span>
-                        <button onclick="removeFromCart(${index})" style="background:red; color:white; border:none; border-radius:5px;">❌</button>
-                    </div>
-                `;
-            });
-            cartItemsContainer.innerHTML = html;
-            document.getElementById('total-price').innerText = total.toLocaleString();
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            document.getElementById('cart-count').innerText = cart.length;
-            updateCart();
-        }
-
-        function searchProducts() {
-            const query = document.getElementById('search-input').value.toLowerCase().trim();
-            document.querySelectorAll('.product-card').forEach(card => {
-                const name = card.getAttribute('data-name');
-                card.style.display = name.includes(query) ? "block" : "none";
-            });
-        }
-    </script>
+    <!-- Bu yerga app.js ulangan -->
+    <script src="app.js"></script>
 </body>
 </html>
