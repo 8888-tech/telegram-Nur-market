@@ -8,18 +8,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Kirish sahifasi -->
     <div id="reg-page" class="page active">
         <h2>Nur Marketga xush kelibsiz!</h2>
         <input type="text" id="user-name" placeholder="Ismingiz">
-        <input type="tel" id="user-phone" placeholder="Telefon raqam">
+        <input type="tel" id="user-phone" placeholder="Telefon raqamingiz">
         <button onclick="saveUser()">Do'konga kirish</button>
     </div>
 
+    <!-- Do'kon sahifasi -->
     <div id="shop-page" class="page">
-        <div class="cat-bar" id="cat-bar"></div>
-        <div id="product-list" class="grid"></div>
+        <div id="product-list"></div>
         <button class="cart-btn" onclick="checkout()">🛒 Zakaz berish</button>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>
