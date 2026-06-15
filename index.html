@@ -9,18 +9,16 @@
 </head>
 <body>
     <div id="reg-page" class="page active">
-        <h2>Xush kelibsiz!</h2>
-        <input type="text" id="user-name" placeholder="Ismingizni yozing">
-        <button onclick="registerUser()">Kirish</button>
+        <h2>Nur Marketga xush kelibsiz!</h2>
+        <input type="text" id="user-name" placeholder="Ismingiz">
+        <input type="tel" id="user-phone" placeholder="Telefon raqamingiz">
+        <button class="btn" onclick="saveUser()">Do'konga kirish</button>
     </div>
 
     <div id="shop-page" class="page">
-        <div class="cat-bar">
-            <button onclick="filter('Barchasi')">Barchasi</button>
-            <button onclick="filter('Xo\'jalik')">Xo'jalik</button>
-        </div>
+        <div class="cat-bar" id="cat-bar"></div>
         <div id="product-list" class="grid"></div>
-        <button class="cart-btn" onclick="checkout()">🛒 Zakaz berish</button>
+        <button class="cart-btn" onclick="checkout()">🛒 Buyurtmani yuborish</button>
     </div>
 
     <script src="app.js"></script>
