@@ -1,7 +1,11 @@
-body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding-bottom: 90px; }
+body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+.content-box { padding: 20px; }
+h2, h3 { text-align: center; color: #333; }
 .page { display: none; }
 .active { display: block; }
-input { width: 90%; padding: 15px; margin: 10px 5%; border-radius: 12px; border: 1px solid #ddd; }
-button { width: 90%; margin: 10px 5%; padding: 15px; background: #ff6600; color: white; border: none; border-radius: 12px; cursor: pointer; }
-.cat-card, .product-card { background: white; margin: 15px; padding: 15px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-.floating-cart { position: fixed; bottom: 20px; left: 10%; width: 80%; background: #ff6600; color: white; padding: 15px; border-radius: 30px; text-align: center; font-weight: bold; cursor: pointer; }
+input { width: 90%; padding: 15px; margin: 10px auto; display: block; border-radius: 12px; border: 1px solid #ddd; }
+button { width: 90%; margin: 10px auto; padding: 15px; display: block; background: #ff6600; color: white; border: none; border-radius: 12px; cursor: pointer; }
+.cat-card, .product-card { background: white; margin: 15px auto; padding: 15px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+.floating-cart { position: fixed; bottom: 20px; left: 5%; width: 90%; background: #ff6600; color: white; padding: 15px; border-radius: 30px; text-align: center; font-weight: bold; cursor: pointer; }
+.back-btn { background: #333; margin-bottom: 20px; }
+.order-btn { background: #28a745; }

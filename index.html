@@ -8,20 +8,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="reg-page" class="page active">
-        <h2>Nur Marketga xush kelibsiz!</h2>
-        <input type="text" id="user-name" placeholder="Ism va Familiya">
-        <input type="tel" id="user-phone" placeholder="+998">
-        <button onclick="saveUser()">Kirish</button>
+        <div class="content-box">
+            <h2>Nur Marketga xush kelibsiz!</h2>
+            <input type="text" id="user-name" placeholder="Ism va Familiya">
+            <input type="tel" id="user-phone" placeholder="+998">
+            <button onclick="saveUser()">Kirish</button>
+        </div>
     </div>
 
-    <div id="shop-page" class="page">
-        <div id="product-list">
-            </div>
+    <div id="shop-page" class="page" style="display:none;">
+        <div id="product-list" class="content-box"></div>
         <div id="cart-btn" class="floating-cart" onclick="showCart()">🛒 Savat (0 ta)</div>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>

@@ -3,15 +3,11 @@ let allProducts = [];
 let cart = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1-muammo: Sahifa yuklanganda sessiyani tekshirish
     if (sessionStorage.getItem('isRegistered') === 'true') {
         document.getElementById('reg-page').style.display = 'none';
         document.getElementById('shop-page').style.display = 'block';
         loadProducts();
     }
-
-    document.getElementById('save-user-btn')?.addEventListener('click', saveUser);
-    document.getElementById('cart-btn')?.addEventListener('click', showCart);
 });
 
 async function saveUser() {
@@ -19,6 +15,7 @@ async function saveUser() {
     const phone = document.getElementById('user-phone').value;
     if (name && phone) {
         sessionStorage.setItem('isRegistered', 'true');
+        sessionStorage.setItem('userName', name);
         await loadProducts();
         document.getElementById('reg-page').style.display = 'none';
         document.getElementById('shop-page').style.display = 'block';
@@ -28,9 +25,11 @@ async function saveUser() {
 }
 
 async function loadProducts() {
-    const res = await fetch(URL);
-    allProducts = await res.json();
-    renderCategories();
+    try {
+        const res = await fetch(URL);
+        allProducts = await res.json();
+        renderCategories();
+    } catch (e) { alert("Xatolik yuz berdi!"); }
 }
 
 function renderCategories() {
@@ -65,15 +64,22 @@ function showCart() {
     document.getElementById('product-list').innerHTML = `
         <button onclick="renderCategories()" class="back-btn">⬅️ Do'konga qaytish</button>
         <h3>Savatdagi mahsulotlar:</h3>
-        ${cart.map(i => `<p>${i.name} - ${i.qty} ta</p>`).join('')}
+        ${cart.map(i => `<p>${i.name} - ${i.qty} ta <button onclick="removeFromCart('${i.name}')">❌</button></p>`).join('')}
         <p><b>Jami: ${total} so'm</b></p>
-        <select id="pay-type"><option>Naqd</option><option>Click/Payme</option></select>
+        <select id="pay-type" style="width:100%; padding:10px; margin:10px 0;"><option>Naqd</option><option>Click/Payme</option></select>
         <button onclick="checkout()" class="order-btn">✅ Buyurtmani tasdiqlash</button>
     `;
 }
 
+function removeFromCart(name) {
+    cart = cart.filter(i => i.name !== name);
+    showCart();
+    document.getElementById('cart-btn').innerText = `🛒 Savat (${cart.reduce((s, i) => s + i.qty, 0)} ta)`;
+}
+
 function checkout() {
     let orderData = {
+        ism: sessionStorage.getItem('userName'),
         buyurtma: cart.map(i => `${i.name} (${i.qty})`).join(', '),
         jami: cart.reduce((s, i) => s + (i.price * i.qty), 0) + " so'm",
         tolov: document.getElementById('pay-type').value
