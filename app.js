@@ -1,8 +1,8 @@
 const URL = "https://script.google.com/macros/s/AKfycbwE4nSqAdOUDm4zmgtZQYuXFxhrUmYsz8YsYY0ABNDg_Pf_NelMSxHLlR_dveY50ZwMHA/exec";
 let allProducts = [], cart = [];
 
-// Bot yuklanishi bilan mahsulotlarni yuklashni boshlaydi
-document.addEventListener('DOMContentLoaded', loadProducts);
+// 1. BU YERDAN: DOMContentLoaded ni o'chirdik, chunki mahsulotlar 
+// faqat "Kirish" bosilganda yuklanishi kerak.
 
 async function loadProducts() {
     try {
@@ -10,8 +10,22 @@ async function loadProducts() {
         allProducts = await res.json();
         renderCategories();
     } catch (error) {
-        console.error("Mahsulotlarni yuklashda xatolik:", error);
-        document.getElementById('product-list').innerHTML = "<p>Mahsulotlarni yuklab bo'lmadi. Internetni tekshiring.</p>";
+        console.error("Xatolik:", error);
+        document.getElementById('product-list').innerHTML = "<p>Internetni tekshiring!</p>";
+    }
+}
+
+// 2. KIRISH FUNKSIYASI (Siz so'ragan qism)
+function saveUser() {
+    const name = document.getElementById('user-name').value;
+    const phone = document.getElementById('user-phone').value;
+
+    if (name && phone) {
+        document.getElementById('reg-page').style.display = 'none';
+        document.getElementById('shop-page').style.display = 'block';
+        loadProducts(); // Faqat shu yerda yuklanadi
+    } else {
+        alert("Iltimos, ism va telefon raqamini kiriting!");
     }
 }
 
@@ -40,11 +54,7 @@ function showProds(cat) {
 
 function addToCart(name, price) {
     let item = cart.find(i => i.name === name);
-    if (item) {
-        item.qty++;
-    } else {
-        cart.push({ name, price, qty: 1 });
-    }
+    item ? item.qty++ : cart.push({ name, price, qty: 1 });
     alert(name + " savatga qo'shildi!");
 }
 
@@ -65,19 +75,9 @@ function showCart() {
 async function checkout() {
     const name = document.getElementById('order-name').value;
     const phone = document.getElementById('order-phone').value;
-    
-    if (!name || !phone) {
-        alert("Iltimos, ism va telefon raqamni kiriting!");
-        return;
-    }
+    if (!name || !phone) return alert("Ma'lumotlarni to'ldiring!");
 
-    const orderData = {
-        ism: name,
-        telefon: phone,
-        buyurtma: cart.map(i => `${i.name} (${i.qty} ta)`).join(', '),
-        jami: cart.reduce((s, i) => s + (i.price * i.qty), 0) + " so'm",
-        tolov: document.getElementById('pay-type').value
-    };
+    const orderData = { ism: name, telefon: phone, buyurtma: cart.map(i => `${i.name} (${i.qty} ta)`).join(', '), jami: cart.reduce((s, i) => s + (i.price * i.qty), 0) + " so'm", tolov: document.getElementById('pay-type').value };
 
     await fetch(URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(orderData) });
     
