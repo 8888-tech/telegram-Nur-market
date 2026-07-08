@@ -1,34 +1,33 @@
 const URL = "https://script.google.com/macros/s/AKfycbwE4nSqAdOUDm4zmgtZQYuXFxhrUmYsz8YsYY0ABNDg_Pf_NelMSxHLlR_dveY50ZwMHA/exec";
 let allProducts = [], cart = [];
 
-// 1. BU YERDAN: DOMContentLoaded ni o'chirdik, chunki mahsulotlar 
-// faqat "Kirish" bosilganda yuklanishi kerak.
+// 1. Registratsiya funksiyasi
+function saveUser() {
+    const name = document.getElementById('user-name').value;
+    const phone = document.getElementById('user-phone').value;
 
+    if (name.trim() !== "" && phone.trim() !== "") {
+        document.getElementById('reg-page').style.display = 'none';
+        document.getElementById('shop-page').style.display = 'block';
+        loadProducts();
+    } else {
+        alert("Iltimos, ism va telefon raqamini to'liq kiriting!");
+    }
+}
+
+// 2. Mahsulotlarni yuklash
 async function loadProducts() {
+    document.getElementById('product-list').innerHTML = "Yuklanmoqda...";
     try {
         const res = await fetch(URL);
         allProducts = await res.json();
         renderCategories();
     } catch (error) {
-        console.error("Xatolik:", error);
         document.getElementById('product-list').innerHTML = "<p>Internetni tekshiring!</p>";
     }
 }
 
-// 2. KIRISH FUNKSIYASI (Siz so'ragan qism)
-function saveUser() {
-    const name = document.getElementById('user-name').value;
-    const phone = document.getElementById('user-phone').value;
-
-    if (name && phone) {
-        document.getElementById('reg-page').style.display = 'none';
-        document.getElementById('shop-page').style.display = 'block';
-        loadProducts(); // Faqat shu yerda yuklanadi
-    } else {
-        alert("Iltimos, ism va telefon raqamini kiriting!");
-    }
-}
-
+// 3. Kategoriyalarni ko'rsatish
 function renderCategories() {
     const cats = [...new Set(allProducts.map(p => p.category))];
     document.getElementById('product-list').innerHTML = `
@@ -38,6 +37,7 @@ function renderCategories() {
     `;
 }
 
+// 4. Mahsulotlarni ko'rsatish
 function showProds(cat) {
     const prods = allProducts.filter(p => p.category === cat);
     document.getElementById('product-list').innerHTML = `
@@ -52,12 +52,14 @@ function showProds(cat) {
     `;
 }
 
+// 5. Savatga qo'shish
 function addToCart(name, price) {
     let item = cart.find(i => i.name === name);
     item ? item.qty++ : cart.push({ name, price, qty: 1 });
     alert(name + " savatga qo'shildi!");
 }
 
+// 6. Savatni ko'rish
 function showCart() {
     let total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
     document.getElementById('product-list').innerHTML = `
@@ -72,12 +74,19 @@ function showCart() {
     `;
 }
 
+// 7. Buyurtmani yuborish
 async function checkout() {
     const name = document.getElementById('order-name').value;
     const phone = document.getElementById('order-phone').value;
     if (!name || !phone) return alert("Ma'lumotlarni to'ldiring!");
 
-    const orderData = { ism: name, telefon: phone, buyurtma: cart.map(i => `${i.name} (${i.qty} ta)`).join(', '), jami: cart.reduce((s, i) => s + (i.price * i.qty), 0) + " so'm", tolov: document.getElementById('pay-type').value };
+    const orderData = { 
+        ism: name, 
+        telefon: phone, 
+        buyurtma: cart.map(i => `${i.name} (${i.qty} ta)`).join(', '), 
+        jami: cart.reduce((s, i) => s + (i.price * i.qty), 0) + " so'm", 
+        tolov: document.getElementById('pay-type').value 
+    };
 
     await fetch(URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(orderData) });
     
@@ -90,6 +99,7 @@ async function checkout() {
     renderCategories();
 }
 
+// 8. Tarixni ko'rish
 function showOrderHistory() {
     const history = JSON.parse(localStorage.getItem('myOrders') || '[]');
     document.getElementById('product-list').innerHTML = `
