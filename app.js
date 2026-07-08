@@ -14,7 +14,7 @@ async function loadProducts() {
 }
 
 function renderCategories() {
-    const cats = [...new Set(allProducts.map(p => p.category))];
+    const cats = [...new Set(allProducts.map(p => p.Kategoriya))];
     document.getElementById('product-list').innerHTML = `
         <h3>Kategoriyalar</h3>
         ${cats.map(cat => `<div class="cat-card" onclick="showProds('${cat.replace(/'/g, "\\'")}')"><h3>${cat}</h3></div>`).join('')}
@@ -23,19 +23,22 @@ function renderCategories() {
 }
 
 function showProds(cat) {
-    const prods = allProducts.filter(p => p.category === cat);
+    const prods = allProducts.filter(p => p.Kategoriya === cat);
     document.getElementById('product-list').innerHTML = `
         <button onclick="renderCategories()" class="back-btn">⬅️ Orqaga</button>
-        ${prods.map(p => `
+        ${prods.map(p => {
+            const unit = p["o'lchov birligi"] || 'dona';
+            const price = p["Bittasini narxi"];
+            return `
             <div style="border:1px solid #ccc; padding:10px; margin:10px 0; display:flex; align-items:center; gap:10px;">
-                <img src="${p.image}" style="width:80px; height:80px; object-fit:cover; border-radius:5px;">
+                <img src="${p.Rasim}" style="width:80px; height:80px; object-fit:cover; border-radius:5px;">
                 <div>
-                    <p style="margin:0;"><b>${p.name}</b></p>
-                    <p style="margin:0; font-size: 14px;">${p.price} so'm / ${p.unit}</p>
-                    <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.unit}')" style="margin-top:5px;">🛒 Qo'shish</button>
+                    <p style="margin:0;"><b>${p.Nomi}</b></p>
+                    <p style="margin:0; font-size: 14px;">${price} / ${unit}</p>
+                    <button onclick="addToCart('${p.Nomi.replace(/'/g, "\\'")}', '${price}', '${unit}')">🛒 Qo'shish</button>
                 </div>
-            </div>
-        `).join('')}
+            </div>`;
+        }).join('')}
     `;
 }
 
@@ -46,12 +49,10 @@ function addToCart(name, price, unit) {
 }
 
 function showCart() {
-    let total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
     document.getElementById('product-list').innerHTML = `
         <button onclick="renderCategories()" class="back-btn">⬅️ Do'konga qaytish</button>
         <h3>Savat:</h3>
         ${cart.map(i => `<p>${i.name} - ${i.qty} ${i.unit}</p>`).join('')}
-        <p><b>Jami: ${total} so'm</b></p>
         <input type="text" id="order-name" placeholder="Ismingiz" style="width:100%; padding:10px; margin:5px 0;">
         <input type="tel" id="order-phone" placeholder="Telefon raqam" style="width:100%; padding:10px; margin:5px 0;">
         <button onclick="checkout()" style="width:100%; padding:15px; background:green; color:white; border:none;">✅ Tasdiqlash</button>
@@ -66,13 +67,11 @@ async function checkout() {
     const orderData = { 
         ism: name, 
         telefon: phone, 
-        buyurtma: cart.map(i => `${i.name} (${i.qty} ${i.unit})`).join(', '), 
-        jami: cart.reduce((s, i) => s + (i.price * i.qty), 0) + " so'm"
+        buyurtma: cart.map(i => `${i.name} (${i.qty} ${i.unit})`).join(', ')
     };
 
     await fetch(URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(orderData) });
     
-    // Tarixni saqlash
     let history = JSON.parse(localStorage.getItem('myOrders') || '[]');
     history.push({...orderData, sana: new Date().toLocaleString()});
     localStorage.setItem('myOrders', JSON.stringify(history));
@@ -87,9 +86,8 @@ function showOrderHistory() {
     document.getElementById('product-list').innerHTML = `
         <button onclick="renderCategories()" class="back-btn">⬅️ Orqaga</button>
         <h3>Tarix:</h3>
-        ${history.length === 0 ? '<p>Hozircha buyurtmalar yo\'q.</p>' : 
-        history.map(h => `<div style="border-bottom:1px solid #ccc; padding: 10px;">
-            <small>${h.sana}</small><br><b>${h.buyurtma}</b><br>Jami: ${h.jami}
+        ${history.map(h => `<div style="border-bottom:1px solid #ccc; padding: 10px;">
+            <small>${h.sana}</small><br><b>${h.buyurtma}</b>
         </div>`).join('')}
     `;
 }
