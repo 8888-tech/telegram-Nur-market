@@ -1,10 +1,18 @@
 const URL = "https://script.google.com/macros/s/AKfycbwE4nSqAdOUDm4zmgtZQYuXFxhrUmYsz8YsYY0ABNDg_Pf_NelMSxHLlR_dveY50ZwMHA/exec";
 let allProducts = [], cart = [];
 
+// Bot yuklanishi bilan mahsulotlarni yuklashni boshlaydi
+document.addEventListener('DOMContentLoaded', loadProducts);
+
 async function loadProducts() {
-    const res = await fetch(URL);
-    allProducts = await res.json();
-    renderCategories();
+    try {
+        const res = await fetch(URL);
+        allProducts = await res.json();
+        renderCategories();
+    } catch (error) {
+        console.error("Mahsulotlarni yuklashda xatolik:", error);
+        document.getElementById('product-list').innerHTML = "<p>Mahsulotlarni yuklab bo'lmadi. Internetni tekshiring.</p>";
+    }
 }
 
 function renderCategories() {
@@ -21,13 +29,23 @@ function showProds(cat) {
     document.getElementById('product-list').innerHTML = `
         <button onclick="renderCategories()" class="back-btn">⬅️ Orqaga</button>
         ${prods.map(p => `
-            <div class="product-card">
+            <div class="product-card" style="margin: 10px 0; border: 1px solid #ccc; padding: 10px;">
                 <img src="${p.image}" style="width:100px; height:100px; object-fit:cover;">
                 <p>${p.name} - ${p.price} so'm</p>
                 <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">🛒 Qo'shish</button>
             </div>
         `).join('')}
     `;
+}
+
+function addToCart(name, price) {
+    let item = cart.find(i => i.name === name);
+    if (item) {
+        item.qty++;
+    } else {
+        cart.push({ name, price, qty: 1 });
+    }
+    alert(name + " savatga qo'shildi!");
 }
 
 function showCart() {
@@ -40,14 +58,22 @@ function showCart() {
         <input type="text" id="order-name" placeholder="Ismingiz" required style="width:100%; padding:10px; margin:5px 0;">
         <input type="tel" id="order-phone" placeholder="Telefon raqam" required style="width:100%; padding:10px; margin:5px 0;">
         <select id="pay-type" style="width:100%; padding:10px;"><option>Naqd</option><option>Click/Payme</option></select>
-        <button onclick="checkout()" style="width:100%; padding:15px; margin-top:10px; background:green; color:white;">✅ Buyurtmani tasdiqlash</button>
+        <button onclick="checkout()" style="width:100%; padding:15px; margin-top:10px; background:green; color:white; border:none;">✅ Buyurtmani tasdiqlash</button>
     `;
 }
 
 async function checkout() {
+    const name = document.getElementById('order-name').value;
+    const phone = document.getElementById('order-phone').value;
+    
+    if (!name || !phone) {
+        alert("Iltimos, ism va telefon raqamni kiriting!");
+        return;
+    }
+
     const orderData = {
-        ism: document.getElementById('order-name').value,
-        telefon: document.getElementById('order-phone').value,
+        ism: name,
+        telefon: phone,
         buyurtma: cart.map(i => `${i.name} (${i.qty} ta)`).join(', '),
         jami: cart.reduce((s, i) => s + (i.price * i.qty), 0) + " so'm",
         tolov: document.getElementById('pay-type').value
@@ -69,8 +95,6 @@ function showOrderHistory() {
     document.getElementById('product-list').innerHTML = `
         <button onclick="renderCategories()" class="back-btn">⬅️ Orqaga</button>
         <h3>Tarix:</h3>
-        ${history.map(h => `<div style="border-bottom:1px solid #ccc;">${h.sana}: ${h.buyurtma} - ${h.jami}</div>`).join('')}
+        ${history.map(h => `<div style="border-bottom:1px solid #ccc; padding: 5px;">${h.sana}: ${h.buyurtma} - ${h.jami}</div>`).join('')}
     `;
-    // Faylning eng pastiga qo'shing
-document.addEventListener('DOMContentLoaded', loadProducts);
 }
