@@ -1,4 +1,4 @@
-const URL = "https://script.google.com/macros/s/AKfycbwK9dObMKVE52rUUbCSbtE5VHZPy0nWreIfQSNuuYc_CGFBX0DKaBYDQANzyrA9XhUzaQ/exec";
+const URL = "https://script.google.com/macros/s/AKfycbwE4nSqAdOUDm4zmgtZQYuXFxhrUmYsz8YsYY0ABNDg_Pf_NelMSxHLlR_dveY50ZwMHA/exec"; 
 let allProducts = [];
 let cart = [];
 
@@ -16,6 +16,7 @@ async function saveUser() {
     if (name && phone) {
         sessionStorage.setItem('isRegistered', 'true');
         sessionStorage.setItem('userName', name);
+        sessionStorage.setItem('userPhone', phone);
         await loadProducts();
         document.getElementById('reg-page').style.display = 'none';
         document.getElementById('shop-page').style.display = 'block';
@@ -45,6 +46,7 @@ function showProds(cat) {
         <button onclick="renderCategories()" class="back-btn">⬅️ Orqaga</button>
         ${prods.map(p => `
             <div class="product-card">
+                <img src="${p.image}" style="width:100px; height:100px; object-fit:cover; border-radius:10px;">
                 <p>${p.name} - ${p.price} so'm</p>
                 <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">🛒 Qo'shish</button>
             </div>
@@ -77,15 +79,29 @@ function removeFromCart(name) {
     document.getElementById('cart-btn').innerText = `🛒 Savat (${cart.reduce((s, i) => s + i.qty, 0)} ta)`;
 }
 
-function checkout() {
+async function checkout() {
     let orderData = {
         ism: sessionStorage.getItem('userName'),
-        buyurtma: cart.map(i => `${i.name} (${i.qty})`).join(', '),
+        telefon: sessionStorage.getItem('userPhone'),
+        buyurtma: cart.map(i => `${i.name} (${i.qty} ta)`).join(', '),
         jami: cart.reduce((s, i) => s + (i.price * i.qty), 0) + " so'm",
         tolov: document.getElementById('pay-type').value
     };
-    Telegram.WebApp.sendData(JSON.stringify(orderData));
-    alert("Buyurtma yuborildi!");
-    cart = [];
-    renderCategories();
+
+    try {
+        await fetch(URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        });
+        
+        Telegram.WebApp.sendData(JSON.stringify(orderData));
+        alert("Buyurtma yuborildi!");
+        cart = [];
+        renderCategories();
+        document.getElementById('cart-btn').innerText = `🛒 Savat (0 ta)`;
+    } catch (e) {
+        alert("Xatolik yuz berdi!");
+    }
 }
