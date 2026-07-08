@@ -1,4 +1,4 @@
-const URL = "https://script.google.com/macros/s/AKfycbwE4nSqAdOUDm4zmgtZQYuXFxhrUmYsz8YsYY0ABNDg_Pf_NelMSxHLlR_dveY50ZwMHA/exec";
+const URL = "https://script.google.com/macros/s/AKfycbyrNC9NJicBXzcu6VHIFoQ4fP8g2Xwded2hvfhU0EnNvWRcDkEU6snSb6mEVrxo7DL6Tw/exec";
 let allProducts = [], cart = [];
 
 document.addEventListener('DOMContentLoaded', loadProducts);
