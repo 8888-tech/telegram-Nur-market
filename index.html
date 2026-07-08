@@ -7,34 +7,21 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { font-family: sans-serif; margin: 0; padding-bottom: 70px; }
-        .page { display: none; }
-        #reg-page { display: block; padding: 20px; } /* Dastlab ko'rinib turadi */
-        .content-box { padding: 10px; }
-        .floating-cart { position: fixed; bottom: 70px; right: 20px; background: #0088cc; color: white; padding: 15px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .content-box { padding: 20px; }
+        .floating-cart { position: fixed; bottom: 70px; right: 20px; background: #0088cc; color: white; padding: 15px; border-radius: 50px; cursor: pointer; }
         .cat-card { background: #f4f4f4; padding: 15px; margin: 10px 0; border-radius: 8px; cursor: pointer; text-align: center; }
         .back-btn { background: #ccc; padding: 10px; margin-bottom: 10px; border: none; width: 100%; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="reg-page" class="page" style="display:block;">
-        <div class="content-box">
-            <h2>Nur Marketga xush kelibsiz!</h2>
-            <input type="text" id="user-name" placeholder="Ism va Familiya" style="width:100%; padding:10px; margin:5px 0; border:1px solid #ccc;">
-            <input type="tel" id="user-phone" placeholder="+998" style="width:100%; padding:10px; margin:5px 0; border:1px solid #ccc;">
-            <button onclick="saveUser()" style="width:100%; padding:12px; background:green; color:white; border:none; cursor:pointer;">Kirish</button>
-        </div>
+    <div id="product-list" class="content-box">Yuklanmoqda...</div>
+    <div id="cart-btn" class="floating-cart" onclick="showCart()">🛒 Savat</div>
+    
+    <div style="position:fixed; bottom:0; width:100%; background:#28a745; padding:12px; text-align:center; z-index: 100;">
+        <a href="tel:+998993958888" style="color:white; text-decoration:none; font-weight:bold;">📞 Biz bilan bog'lanish: +998 99 395 8888</a>
     </div>
 
-    <div id="shop-page" class="page">
-        <div id="product-list" class="content-box"></div>
-        <div id="cart-btn" class="floating-cart" onclick="showCart()">🛒 Savat (0 ta)</div>
-        
-        <div style="position:fixed; bottom:0; width:100%; background:#0088cc; padding:12px; text-align:center; z-index: 100;">
-            <a href="tel:+998991234567" style="color:white; text-decoration:none; font-weight:bold;">📞 Biz bilan bog'lanish</a>
-        </div>
-    </div>
-
-    <script src="app.js?v=123"></script>
+    <script src="app.js?v=99"></script>
 </body>
 </html>
