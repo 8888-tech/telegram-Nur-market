@@ -4,23 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nur Market</title>
+    <!-- Telegram WebApp uchun script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Sahifalar uchun asosiy uslub */
+        .page { display: none; }
+        .page.active { display: block; }
+        .content-box { padding: 20px; }
+        .floating-cart { position: fixed; bottom: 60px; right: 20px; background: #0088cc; color: white; padding: 15px; border-radius: 50px; cursor: pointer; }
+    </style>
 </head>
 <body>
+
+    <!-- Kirish sahifasi -->
     <div id="reg-page" class="page active">
         <div class="content-box">
             <h2>Nur Marketga xush kelibsiz!</h2>
-            <input type="text" id="user-name" placeholder="Ism va Familiya">
-            <input type="tel" id="user-phone" placeholder="+998">
-            <button onclick="saveUser()">Kirish</button>
+            <input type="text" id="user-name" placeholder="Ism va Familiya" style="width:100%; padding:10px; margin:5px 0;">
+            <input type="tel" id="user-phone" placeholder="+998" style="width:100%; padding:10px; margin:5px 0;">
+            <button onclick="saveUser()" style="width:100%; padding:10px; background:green; color:white;">Kirish</button>
         </div>
     </div>
 
-    <div id="shop-page" class="page" style="display:none;">
+    <!-- Do'kon sahifasi -->
+    <div id="shop-page" class="page">
         <div id="product-list" class="content-box"></div>
         <div id="cart-btn" class="floating-cart" onclick="showCart()">🛒 Savat (0 ta)</div>
+        
+        <!-- Doimiy aloqa tugmasi -->
+        <div style="position:fixed; bottom:0; width:100%; background:#0088cc; padding:10px; text-align:center;">
+            <a href="tel:+998991234567" style="color:white; text-decoration:none; font-weight:bold;">📞 Biz bilan bog'lanish: +998 99 123 45 67</a>
+        </div>
     </div>
+
+    <!-- Asosiy logika -->
     <script src="app.js"></script>
 </body>
 </html>
