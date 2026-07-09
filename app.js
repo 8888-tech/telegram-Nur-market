@@ -1,5 +1,8 @@
-const URL = "https://script.google.com/macros/s/AKfycbzmEk3A6MyOnZaAijzEwIvlUEx77jn5QrWl972xCq1tM2UFv-9wUgo2bpSAB-lcpF3fHQ/exec"; // Yangi URL ni shu yerga qo'ying
+// URL ni albatta o'zingizning yangi Web App manzilingiz bilan almashtiring!
+const URL = "https://script.google.com/macros/s/AKfycbxmR4RGx4Hjaj5NNrep03vSIa9jXzVNzDvSRNR3xXkFPGihonqSXZSTqXz4FzXvOiQf2A/exec"; 
 let allProducts = [], cart = [];
+
+document.addEventListener('DOMContentLoaded', loadProducts);
 
 async function loadProducts() {
     try {
@@ -7,7 +10,7 @@ async function loadProducts() {
         allProducts = await res.json();
         renderCategories();
     } catch (e) {
-        document.getElementById('product-list').innerHTML = "Xatolik yuz berdi.";
+        document.getElementById('product-list').innerHTML = "Xatolik: Ma'lumot olib bo'lmadi.";
     }
 }
 
@@ -30,7 +33,7 @@ function showProds(cat) {
                 <div class="product-card">
                     <img src="${p.Rasim}" onerror="this.src='https://via.placeholder.com/100'">
                     <p style="font-weight:bold;">${p.Nomi}</p>
-                    <p>${p.Narxi} / ${p.Birlik}</p>
+                    <p style="font-size:12px;">${p.Narxi} so'm / ${p.Birlik}</p>
                     <button class="add-btn" onclick="addToCart('${p.Nomi.replace(/'/g, "\\'")}')">+</button>
                 </div>
             `).join('')}
@@ -47,9 +50,34 @@ function showCart() {
     document.getElementById('product-list').innerHTML = `
         <button class="back-btn" onclick="renderCategories()">⬅ Orqaga</button>
         <h3>🛒 Savatcha:</h3>
-        <ul>${cart.map(item => `<li>${item}</li>`).join('')}</ul>
-        <button class="back-btn" style="background:#4CAF50; color:white;" onclick="alert('Buyurtma yuborildi!')">Buyurtmani tasdiqlash</button>
+        <ul style="text-align:left;">${cart.map(item => `<li>${item}</li>`).join('')}</ul>
+        <button class="back-btn" style="background:#4CAF50; color:white; width: 90%;" onclick="sendOrder()">✅ Buyurtmani tasdiqlash</button>
     `;
 }
 
-document.addEventListener('DOMContentLoaded', loadProducts);
+async function sendOrder() {
+    if(cart.length === 0) return alert("Savatcha bo'sh!");
+    
+    const orderData = {
+        ism: "Mijoz", 
+        telefon: "+998900000000", 
+        buyurtma: cart.join(", ")
+    };
+
+    try {
+        const res = await fetch(URL, {
+            method: 'POST',
+            body: JSON.stringify(orderData)
+        });
+        const result = await res.json();
+        if(result.status === "success") {
+            alert("Buyurtmangiz qabul qilindi!");
+            cart = [];
+            renderCategories();
+        } else {
+            alert("Xatolik yuz berdi.");
+        }
+    } catch(e) {
+        alert("Server bilan bog'lanib bo'lmadi.");
+    }
+}
