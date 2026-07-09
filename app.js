@@ -1,8 +1,5 @@
-// URL ni albatta o'zingizniki bilan almashtiring!
-const URL = "https://script.google.com/macros/s/AKfycbyrNC9NJicBXzcu6VHIFoQ4fP8g2Xwded2hvfhU0EnNvWRcDkEU6snSb6mEVrxo7DL6Tw/exec";
-let allProducts = [];
-
-document.addEventListener('DOMContentLoaded', loadProducts);
+const URL = "https://script.google.com/macros/s/AKfycbzmEk3A6MyOnZaAijzEwIvlUEx77jn5QrWl972xCq1tM2UFv-9wUgo2bpSAB-lcpF3fHQ/exec"; // Yangi URL ni shu yerga qo'ying
+let allProducts = [], cart = [];
 
 async function loadProducts() {
     try {
@@ -10,18 +7,17 @@ async function loadProducts() {
         allProducts = await res.json();
         renderCategories();
     } catch (e) {
-        document.getElementById('product-list').innerHTML = "Xatolik: Ma'lumot olib bo'lmadi. URL ni tekshiring.";
+        document.getElementById('product-list').innerHTML = "Xatolik yuz berdi.";
     }
 }
 
 function renderCategories() {
-    if (allProducts.length === 0) return;
     const cats = [...new Set(allProducts.map(p => p.Kategoriya).filter(c => c))];
-    
     document.getElementById('product-list').innerHTML = `
-        <h3 style="margin:20px; text-align:center;">Kategoriyalar</h3>
+        <h3 style="text-align:center;">Kategoriyalar</h3>
         ${cats.map(cat => `<div class="cat-card" onclick="showProds('${cat.replace(/'/g, "\\'")}')"><h3>${cat}</h3></div>`).join('')}
-        <button class="back-btn" onclick="showOrderHistory()">📜 Buyurtmalar tarixi</button>
+        <button class="back-btn" onclick="showCart()">🛒 Savatcha (${cart.length})</button>
+        <p style="text-align:center; margin-top:20px;">📞 Aloqa: +998 90 123 45 67</p>
     `;
 }
 
@@ -33,29 +29,27 @@ function showProds(cat) {
             ${prods.map(p => `
                 <div class="product-card">
                     <img src="${p.Rasim}" onerror="this.src='https://via.placeholder.com/100'">
-                    <p style="margin:8px 0; font-weight:bold;">${p.Nomi}</p>
-                    <p style="font-size:12px; color:gray;">${p["o'lchov birligi"]}</p>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span>${p["Bittasini narxi"]}</span>
-                        <button class="add-btn" onclick="alert('Tanlandi: ${p.Nomi}')">+</button>
-                    </div>
+                    <p style="font-weight:bold;">${p.Nomi}</p>
+                    <p>${p.Narxi} / ${p.Birlik}</p>
+                    <button class="add-btn" onclick="addToCart('${p.Nomi.replace(/'/g, "\\'")}')">+</button>
                 </div>
             `).join('')}
         </div>
     `;
 }
 
-function showOrderHistory() {
-    const history = JSON.parse(localStorage.getItem('myOrders') || '[]');
+function addToCart(name) {
+    cart.push(name);
+    alert(name + " savatchaga qo'shildi!");
+}
+
+function showCart() {
     document.getElementById('product-list').innerHTML = `
         <button class="back-btn" onclick="renderCategories()">⬅ Orqaga</button>
-        <div style="padding:10px;">
-            <h3 style="text-align:center;">📋 Cheklar Tarixi</h3>
-            ${history.length === 0 ? '<p style="text-align:center;">Hali buyurtma berilmagan.</p>' : 
-              history.map(h => `<div style="background:white; padding:15px; margin-bottom:10px; border-radius:10px; border: 1px dashed #333;">
-                <p><b>Sana:</b> ${h.sana}</p>
-                <p>${h.buyurtma}</p>
-              </div>`).join('')}
-        </div>
+        <h3>🛒 Savatcha:</h3>
+        <ul>${cart.map(item => `<li>${item}</li>`).join('')}</ul>
+        <button class="back-btn" style="background:#4CAF50; color:white;" onclick="alert('Buyurtma yuborildi!')">Buyurtmani tasdiqlash</button>
     `;
 }
+
+document.addEventListener('DOMContentLoaded', loadProducts);
