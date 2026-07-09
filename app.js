@@ -1,4 +1,4 @@
-const URL = "https://script.google.com/macros/s/AKfycbyrNC9NJicBXzcu6VHIFoQ4fP8g2Xwded2hvfhU0EnNvWRcDkEU6snSb6mEVrxo7DL6Tw/exec";
+const URL = "https://script.google.com/macros/s/AKfycbyyEh450CWg_ptdZmUViI51Lf0_ii3RJblIZe18AxN_4KGk2PwnlUrjjgPQVUvF8xUExA/exec";
 let allProducts = [];
 
 document.addEventListener('DOMContentLoaded', loadProducts);
@@ -14,8 +14,9 @@ async function loadProducts() {
 }
 
 function renderCategories() {
-    // Kategoriya nomlarini olamiz va takroriylarni o'chiramiz
-    const cats = [...new Set(allProducts.map(p => p.Kategoriya))];
+    // Faqat kategoriyasi bor mahsulotlarni filtrlaymiz va undefinedlarni olib tashlaymiz
+    const cats = [...new Set(allProducts.map(p => p.Kategoriya).filter(c => c && c !== ''))];
+    
     document.getElementById('product-list').innerHTML = `
         <h3 style="margin:20px; text-align:center;">Kategoriyalar</h3>
         ${cats.map(cat => `<div class="cat-card" onclick="showProds('${cat}')"><h3>${cat}</h3></div>`).join('')}
