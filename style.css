@@ -159,3 +159,11 @@ input {
     border-radius: 8px !important;
     margin-bottom: 8px !important;
 }
+.product-img {
+    width: 100% !important;
+    height: 120px !important;
+    object-fit: contain !important;
+    background-color: #ffffff !important;
+    border-radius: 8px !important;
+    margin-bottom: 8px !important;
+}

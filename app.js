@@ -47,7 +47,7 @@ function showProds(cat) {
             ${prods.map(p => `
                 <div class="product-card">
                     <div>
-                        <img src="${p.Rasim}" onerror="this.src='https://via.placeholder.com/100'">
+                       <img src="${p.Rasim}" class="product-img" onerror="this.src='https://via.placeholder.com/100'">
                         <p style="font-weight:600; color:#2c3e50;">${p.Nomi}</p>
                     </div>
                     <div>
