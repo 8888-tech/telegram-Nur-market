@@ -1,13 +1,13 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f6f8;
+    background-color: #0f1711; /* NurSay uslubidagi to'q yashil-qora fon */
     margin: 0;
     padding: 15px;
-    color: #333;
+    color: #e2e8f0;
 }
 
 h3 {
-    color: #1a1a1a;
+    color: #ffffff;
     font-size: 18px;
     margin-bottom: 15px;
 }
@@ -21,26 +21,26 @@ h3 {
 }
 
 .cat-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    background: linear-gradient(135deg, #162219 0%, #0f1711 100%);
     padding: 20px 15px;
     border-radius: 12px;
     text-align: center;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    border: 1px solid #e1e4e8;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border: 1px solid #233527;
     transition: all 0.2s ease;
 }
 
 .cat-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    border-color: #4CAF50;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+    border-color: #2e7d32;
 }
 
 .cat-card h3 {
     margin: 0;
     font-size: 15px;
-    color: #2c3e50;
+    color: #ffffff;
 }
 
 /* Asosiy tugmalar (Savat, Tarix, Bog'lanish) */
@@ -52,33 +52,33 @@ h3 {
     width: 100%;
     padding: 14px;
     margin-bottom: 10px;
-    background: #ffffff;
-    border: 1px solid #e1e4e8;
+    background: #162219;
+    border: 1px solid #233527;
     border-radius: 12px;
     font-size: 15px;
     font-weight: 600;
-    color: #333;
+    color: #e2e8f0;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     transition: background 0.2s;
     text-decoration: none;
     box-sizing: border-box;
 }
 
 .menu-btn:hover {
-    background: #f1f3f5;
+    background: #1b2c1f;
 }
 
 .menu-btn.cart {
-    background: #e8f5e9;
-    color: #2e7d32;
-    border-color: #c8e6c9;
+    background: #162219;
+    color: #4caf50;
+    border-color: #2e7d32;
 }
 
 .menu-btn.contact {
-    background: #e3f2fd;
-    color: #1565c0;
-    border-color: #bbdefb;
+    background: #162219;
+    color: #64b5f6;
+    border-color: #1e3a5f;
 }
 
 /* Mahsulotlar gridi */
@@ -89,32 +89,25 @@ h3 {
 }
 
 .product-card {
-    background: #ffffff;
+    background: #162219;
     border-radius: 12px;
     padding: 12px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    border: 1px solid #e1e4e8;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border: 1px solid #233527;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.product-card img {
-    width: 100%;
-    height: 110px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
-
 .product-card p {
     margin: 5px 0;
     font-size: 14px;
+    color: #e2e8f0;
 }
 
 .add-btn {
-    background: #4CAF50;
+    background: #2e7d32;
     color: white;
     border: none;
     padding: 8px;
@@ -127,11 +120,11 @@ h3 {
 }
 
 .add-btn:hover {
-    background: #43a047;
+    background: #256428;
 }
 
 .back-btn {
-    background: #6c757d;
+    background: #233527;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -146,24 +139,34 @@ input {
     width: 100%;
     padding: 12px;
     margin-bottom: 10px;
-    border: 1px solid #ced4da;
+    background: #0f1711;
+    border: 1px solid #233527;
     border-radius: 8px;
     box-sizing: border-box;
     font-size: 14px;
+    color: #white;
+    color: #e2e8f0;
 }
+
+input:focus {
+    border-color: #2e7d32;
+    outline: none;
+}
+
 .product-card img {
     width: 100% !important;
     height: 120px !important;
     object-fit: contain !important;
-    background-color: #ffffff !important;
+    background-color: #0f1711 !important;
     border-radius: 8px !important;
     margin-bottom: 8px !important;
 }
+
 .product-img {
     width: 100% !important;
     height: 120px !important;
     object-fit: contain !important;
-    background-color: #ffffff !important;
+    background-color: #0f1711 !important;
     border-radius: 8px !important;
     margin-bottom: 8px !important;
 }
