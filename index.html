@@ -6,17 +6,29 @@
     <title>Nur Market</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f4f4; padding-bottom: 80px; }
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
-        .product-card { background: white; border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        .product-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; }
-        .add-btn { background: #4CAF50; border: none; width: 40px; height: 40px; border-radius: 50%; color: white; font-size: 20px; cursor: pointer; }
-        .back-btn { background: #fff; padding: 10px; margin: 10px; border: 1px solid #ddd; width: 90%; border-radius: 8px; cursor: pointer; }
-        .cat-card { background: white; padding: 20px; margin: 10px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; font-weight: bold; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background: #f4f6f8; padding: 15px; padding-bottom: 80px; color: #333; }
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .product-card { background: white; border-radius: 12px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e1e4e8; display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
+        
+        /* Rasmlar o'lchami 100% to'g'rilandi */
+        .product-card img {
+            width: 100% !important;
+            height: 120px !important;
+            object-fit: contain !important;
+            background-color: #ffffff !important;
+            border-radius: 8px !important;
+            margin-bottom: 8px !important;
+        }
+
+        .add-btn { background: #4CAF50; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
+        .back-btn { background: #6c757d; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; margin-bottom: 15px; font-weight: 600; width: 100%; }
+        .cat-card { background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); padding: 20px 15px; border-radius: 12px; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e1e4e8; margin-bottom: 10px; font-weight: bold; color: #2c3e50; }
+        .menu-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; margin-bottom: 10px; background: #ffffff; border: 1px solid #e1e4e8; border-radius: 12px; font-size: 15px; font-weight: 600; color: #333; cursor: pointer; box-sizing: border-box; text-decoration: none; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ced4da; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
     </style>
 </head>
 <body>
     <div id="product-list">Yuklanmoqda...</div>
-    <script src="app.js?v=2026"></script>
+    <script src="app.js?v=2026_final"></script>
 </body>
 </html>
