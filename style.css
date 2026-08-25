@@ -1,6 +1,6 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #0f1711; /* NurSay uslubidagi to'q yashil-qora fon */
+    background-color: #0f1711; /* NurSay to'q yashil-qora foni */
     margin: 0;
     padding: 15px;
     color: #e2e8f0;
@@ -144,7 +144,6 @@ input {
     border-radius: 8px;
     box-sizing: border-box;
     font-size: 14px;
-    color: #white;
     color: #e2e8f0;
 }
 
