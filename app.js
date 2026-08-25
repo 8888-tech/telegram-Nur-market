@@ -34,7 +34,7 @@ function renderCategories() {
                 📜 Buyurtmalar tarixi
             </button>
             <a href="tel:+998993958888" class="menu-btn contact">
-                📞 Biz bilan bog'lanish (+998 99 395 88 88)
+                📞 +998 99 395 88 88
             </a>
         </div>
     `;
