@@ -1,12 +1,13 @@
 const URL = "https://script.google.com/macros/s/AKfycbxcN4yMMi386PYjbZd7mGk8YwYzYWscaeqlF67GQRPFTa6to_L5qu8UMa2g68fkrKV56w/exec"; 
 let allProducts = [], cart = [];
 
-// 🔹 Narxni tozalovchi va har 3 raqamdan keyin probel qo'yuvchi funksiya
+// 🔹 Narxni chiroyli formatlash funksiyasi (har 3 raqamdan keyin probel qo'yadi)
 function formatMoney(amount) {
-    if (!amount) return "0";
-    // Agar narx ichida matn yoki ortiqcha belgilar bo'lsa ham hammasini tozalab raqamga o'tkazamiz
-    let cleanNum = Number(String(amount).replace(/[^0-9.-]+/g, "")) || 0;
-    return cleanNum.toLocaleString('ru-RU');
+    if (amount === null || amount === undefined) return "0";
+    let cleanStr = String(amount).replace(/\s+/g, '').replace(/[^\d.-]/g, '');
+    let num = Number(cleanStr);
+    if (isNaN(num)) return amount;
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 async function loadProducts() {
@@ -121,8 +122,9 @@ function showCart() {
 }
 
 async function sendOrder(jami) {
-    const ism = document.getElementById('ism'].value;
-    const tel = document.getElementById('tel'].value;
+    // 🔹 To'g'rilangan joyi: qavslar to'g'ri yopildi
+    const ism = document.getElementById('ism').value;
+    const tel = document.getElementById('tel').value;
     if(!ism || !tel) return alert("Iltimos, ism va telefon raqamni kiriting!");
 
     let orderDetails = cart.map(i => `${i.name} (${i.quantity} ta)`).join(", ");
