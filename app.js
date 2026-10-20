@@ -1,9 +1,12 @@
 const URL = "https://script.google.com/macros/s/AKfycbxcN4yMMi386PYjbZd7mGk8YwYzYWscaeqlF67GQRPFTa6to_L5qu8UMa2g68fkrKV56w/exec"; 
 let allProducts = [], cart = [];
 
-// 🔹 Narxlarni har 3 ta raqamdan keyin probel bilan ajratuvchi yordamchi funksiya
+// 🔹 Narxni tozalovchi va har 3 raqamdan keyin probel qo'yuvchi funksiya
 function formatMoney(amount) {
-    return Number(amount || 0).toLocaleString('ru-RU');
+    if (!amount) return "0";
+    // Agar narx ichida matn yoki ortiqcha belgilar bo'lsa ham hammasini tozalab raqamga o'tkazamiz
+    let cleanNum = Number(String(amount).replace(/[^0-9.-]+/g, "")) || 0;
+    return cleanNum.toLocaleString('ru-RU');
 }
 
 async function loadProducts() {
@@ -58,9 +61,8 @@ function showProds(cat) {
                         <p style="font-weight:600; color:#2c3e50;">${p.Nomi}</p>
                     </div>
                     <div>
-                        <!-- 🔹 BU YERDA: p.Narxi -> formatMoney(p.Narxi) bo'ldi -->
                         <p style="color:#2e7d32; font-weight:bold; margin-bottom:8px;">${formatMoney(p.Narxi)} so'm <span style="font-size:11px; color:#666;">/ ${p.Birlik}</span></p>
-                        <button class="add-btn" onclick="addToCart('${p.Nomi.replace(/'/g, "\\'")}', ${parseFloat(p.Narxi) || 0})">+ Qo'shish</button>
+                        <button class="add-btn" onclick="addToCart('${p.Nomi.replace(/'/g, "\\'")}', ${parseFloat(String(p.Narxi).replace(/[^0-9.-]+/g, "")) || 0})">+ Qo'shish</button>
                     </div>
                 </div>
             `).join('')}
@@ -86,7 +88,7 @@ function changeQuantity(name, amount) {
             cart = cart.filter(i => i.name !== name);
         }
     }
-    showCart(); // Savatchani yangilash
+    showCart(); 
 }
 
 function showCart() {
@@ -100,7 +102,6 @@ function showCart() {
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #f1f3f5; padding-bottom:8px;">
                         <div>
                             <span style="font-weight:600; display:block;">${i.name}</span>
-                            <!-- 🔹 BU YERDA: i.price va umumiy summa formatlandi -->
                             <span style="font-size:13px; color:#2e7d32;">${formatMoney(i.price)} so'm x ${i.quantity} = <b>${formatMoney(i.price * i.quantity)} so'm</b></span>
                         </div>
                         <div style="display:flex; align-items:center; gap:8px;">
@@ -110,7 +111,6 @@ function showCart() {
                         </div>
                     </div>
                 `).join('')}
-                <!-- 🔹 BU YERDA: Jami summa formatlandi -->
                 <p style="text-align:right; font-size:16px; margin-top:10px;"><b>Jami: ${formatMoney(jami)} so'm</b></p>
             </div>
             <input type="text" id="ism" placeholder="Ismingizni kiriting" required>
@@ -121,8 +121,8 @@ function showCart() {
 }
 
 async function sendOrder(jami) {
-    const ism = document.getElementById('ism').value;
-    const tel = document.getElementById('tel').value;
+    const ism = document.getElementById('ism'].value;
+    const tel = document.getElementById('tel'].value;
     if(!ism || !tel) return alert("Iltimos, ism va telefon raqamni kiriting!");
 
     let orderDetails = cart.map(i => `${i.name} (${i.quantity} ta)`).join(", ");
@@ -157,7 +157,6 @@ function showOrderHistory() {
             <div style="background:white; border-left: 4px solid #4CAF50; padding:12px; margin-bottom:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.03); border:1px solid #e1e4e8;">
                 <p style="margin:0; font-size:11px; color:#888;">📅 ${i.date}</p>
                 <p style="margin:6px 0; font-weight:600; color:#333;">🛒 ${i.buyurtma}</p>
-                <!-- 🔹 BU YERDA: Buyurtmalar tarixidagi Jami summa formatlandi -->
                 <p style="margin:0; color:#2e7d32; font-weight:bold;">💰 Jami: ${formatMoney(i.jami)} so'm</p>
             </div>
           `).join('')}
